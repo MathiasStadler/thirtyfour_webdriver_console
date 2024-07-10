@@ -17,6 +17,7 @@ cargo add tokio --features full
 # this should you see inside Cargo.toml
 # tokio = { version = "1.38.0", features = ["full"] }
 cargo add thirtyfour
+cargo add color_eyre
 # build project
 cargo update --workspace --recursive --color auto --verbose
 cargo build
