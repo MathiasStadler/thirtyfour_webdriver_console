@@ -22,4 +22,4 @@ cargo add color_eyre
 cargo update --workspace --recursive --color auto --verbose
 cargo build
 ```
-## first interaktive user
+## first interactive user
