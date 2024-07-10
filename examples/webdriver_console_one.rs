@@ -35,5 +35,4 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     process::exit(0);
 }
 
-
 // RUST_LOG=info cargo run --example webdriver_console_one

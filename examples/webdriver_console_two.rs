@@ -1,5 +1,5 @@
-#[warn(unused_extern_crates)]
-#[warn(dead_code)]
+// #[warn(unused_extern_crates)]
+// #[warn(dead_code)]
 // use START
 // need for log
 #[allow(unused_imports)]
