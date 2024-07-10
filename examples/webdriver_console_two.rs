@@ -124,3 +124,7 @@ async fn wait_seconds_of_browser(
 }
 
 // RUST_LOG=info cargo run --example webdriver_console_two
+
+// cargo clippy --fix --allow-dirty --allow-staged
+// cargo fmt -- --emit=files examples/webdriver_console_two.rs 
+// cargo check --workspace
