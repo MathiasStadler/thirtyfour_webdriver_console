@@ -55,15 +55,17 @@ fn main() {
         println!("{}",input);
     }
 
-    fn execute_command(_cmd:&String){
+    fn execute_command(_cmd: &String){
         info!("start => execute_command");
 
+        let mut _worker = _cmd.clone();
+
         // FROM HERE - https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
-        if _cmd.len() > 0 {
-            _cmd.remove(0);  // remove first
+        if _worker.len() > 0 {
+            _worker.remove(0);  // remove first
         }
 
-        info!("execute command => {}",_cmd);
+        info!("execute command => {}",_worker);
         info!("finished => execute_command");
 
     }
