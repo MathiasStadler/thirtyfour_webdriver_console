@@ -78,9 +78,9 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
 
     info!("call webpage => {}", WEB_PAGE);
     // _driver.goto(WEB_PAGE).await?;
-    
+
     //_driver.goto(WEB_PAGE).await.unwrap();
-    goto_web_page(_driver.clone(),WEB_PAGE).await.unwrap();
+    goto_web_page(_driver.clone(), WEB_PAGE).await.unwrap();
     // wait_seconds_of_browser(_driver.clone(), 5).await?;
     wait_seconds_of_browser(_driver.clone(), 5).await.unwrap();
 
@@ -89,14 +89,16 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     info!("finished => fn run ");
     Ok(())
 }
-async fn goto_web_page(_driver: WebDriver,_web_page:&str) -> color_eyre::Result<(), Box<dyn Error>> {
+async fn goto_web_page(
+    _driver: WebDriver,
+    _web_page: &str,
+) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("call webpage => {}", _web_page);
     // _driver.goto(WEB_PAGE).await?;
     _driver.goto(_web_page).await.unwrap();
 
     Ok(())
 }
-
 
 async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => fn fn use_webdriver_console ");
