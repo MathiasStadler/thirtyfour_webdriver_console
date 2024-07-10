@@ -15,14 +15,12 @@ fn main() {
         let mut input = String::new();
         stdin().read_line(&mut input).unwrap();
 
-        let command = input.trim();
+        input = input.trim().to_string();
 
-        if command == "exit"  { break ; };
+        // shell exit
+        if input == "exit"  { break ; };
 
-        // let mut child = Command::new(command).spawn().unwrap();
-
-        // don't accept another command until this one completes
-        // let _ = child.wait();
-        println!("{}",command);
+        
+        println!("{}",input);
     }
 }
