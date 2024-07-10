@@ -11,7 +11,7 @@ use std::process;
 //need for terminal
 use std::io::stdin;
 use std::io::stdout;
-// douple use std::io::Write;
+// double use std::io::Write;
 
 // need for wait_seconds_of_browser
 use std::time::Duration;
@@ -19,6 +19,9 @@ use std::time::Duration;
 // need for thread::sleep(Duration::from_secs(waiting_period));
 use std::thread;
 
+// need for function name
+// use stdext::prelude::*;
+use stdext::function_name;
 // need for thirtyfour
 #[allow(unused_imports)]
 use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDriver, WebElement};
@@ -46,10 +49,14 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
                 "{}:{}  {warn_style}{}{warn_style:#} - {}",
                 // record.level(),
                 record.file().unwrap_or("unknown"),
+                //function_name!(),
                 record.line().unwrap_or(0),
                 // chrono::Local::now().format("%Y-%m-%dT%H:%M:%S"),
                 record.level(),
                 record.args(),
+                
+                
+                
             )
         })
         .init();
@@ -67,6 +74,7 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     let _ = rt.block_on(run());
 
     info!("finished => env_logger");
+    info!("ciao - We hope to see you soon again");
     process::exit(0);
 }
 
@@ -104,6 +112,9 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
     info!("start => fn fn use_webdriver_console ");
     wait_seconds_of_browser(_driver.clone(), 10).await?;
     info!("input start => XPath ");
+
+    info!("{}",function_name!());
+    
     loop {
         // use the `>` character as the prompt
         // need to explicitly flush this to ensure it prints before read_line
@@ -120,7 +131,10 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
             break;
         };
 
-        // let elem_form: WebElement = _driver.find(By::XPath(WEB_XPATH[field][3])).await?;
+        // start with double point like vim
+        if input.starts_with(":") {
+            execute_command(&input);
+        };
 
         println!("{}", input);
     }
@@ -128,6 +142,26 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
     info!("finished => fn fn use_webdriver_console ");
     Ok(())
 }
+
+fn execute_command(_cmd: &String) {
+    info!("start => execute_command");
+
+    let mut _worker = _cmd.clone();
+
+    // FROM HERE - https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
+    if _worker.len() > 0 {
+        _worker.remove(0); // remove first
+    }
+
+    info!("start => execute command => {}", _worker);
+
+    if _worker == "xpath" {
+        debug!("command => {}",_worker);
+    }
+
+    info!("finished => execute_command");
+}
+
 
 // FOUND HERE
 // https://itehax.com/blog/web-scraping-using-rust
