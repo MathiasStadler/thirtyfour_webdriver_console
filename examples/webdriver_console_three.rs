@@ -110,10 +110,12 @@ async fn goto_web_page(
 
 async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => fn fn use_webdriver_console ");
+    info!("func start => {}",function_name!());
+    info!("func finished => {}",function_name!());
     wait_seconds_of_browser(_driver.clone(), 10).await?;
     info!("input start => XPath ");
 
-    info!("{}",function_name!());
+    
     
     loop {
         // use the `>` character as the prompt
