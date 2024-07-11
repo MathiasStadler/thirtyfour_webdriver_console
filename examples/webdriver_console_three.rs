@@ -8,6 +8,10 @@ use std::error::Error;
 use std::io::Write;
 use std::process;
 
+
+// 
+use std::env::set_var;
+
 //need for terminal
 use std::io::stdin;
 use std::io::stdout;
@@ -37,6 +41,13 @@ const WEB_PAGE: &str = "https://wikipedia.org";
 
 fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     color_eyre::install()?;
+
+
+    // test for RUST_LOG
+    // if env::var("RUST_LOG").is_err() {
+    //     env::set_var("RUST_LOG", "debug")
+    // }
+    set_var("RUST_LOG", "debug");
 
     env_logger::builder()
         .format(|buf, record| {
@@ -135,34 +146,46 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
 
         // start with double point like vim
         if input.starts_with(":") {
-            execute_command(&input);
+            debug!("enter execute command {}",input);
+           let _ = execute_command(_driver.clone(),&input);
         };
 
-        println!("{}", input);
+        info!("input => {}", input);
     }
 
     info!("finished => fn fn use_webdriver_console ");
     Ok(())
 }
 
-fn execute_command(_cmd: &String) {
+async fn execute_command(_driver:WebDriver,_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => execute_command");
 
-    let mut _worker = _cmd.clone();
+    // wait_seconds_of_browser(_driver.clone(), 10).await?;
 
-    // FROM HERE - https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
-    if _worker.len() > 0 {
-        _worker.remove(0); // remove first
-    }
+    // let mut _worker = _cmd.clone();
 
-    info!("start => execute command => {}", _worker);
+    // // FROM HERE - https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
+    // if _worker.len() > 0 {
+    //     _worker.remove(0); // remove first
+    // }
 
-    if _worker == "xpath" {
-        debug!("command => {}",_worker);
-    }
+    // info!("start => execute command => {}", _worker);
+
+    // if _worker == "xpath" {
+    //     debug!("command => {}",_worker);
+    // }
+
+    // if _worker == "close" {
+    //     debug!("command => {}",_worker);
+
+    //     close_browser(_driver.clone()).await?;
+    // }
 
     info!("finished => execute_command");
+    Ok(())
 }
+
+
 
 
 // FOUND HERE
@@ -194,6 +217,15 @@ async fn wait_seconds_of_browser(
     debug!("Thread sleep for {} seconds", waiting_period);
     thread::sleep(Duration::from_secs(waiting_period));
     info!("finished => fn wait_seconds_of_browser ");
+    Ok(())
+}
+
+async fn close_browser(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
+    info!("start => fn close_browser ");
+    // Always explicitly close the browser.
+    _driver.quit().await?;
+    info!("finished => fn close_browser ");
+
     Ok(())
 }
 

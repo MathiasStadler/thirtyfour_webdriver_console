@@ -1,0 +1,452 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'thirtyfour_webdriver_console'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=thirtyfour_webdriver_console",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "thirtyfour_webdriver_console",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in executable 'thirtyfour_webdriver_console'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--bin=thirtyfour_webdriver_console",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "thirtyfour_webdriver_console",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'user_input'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=user_input",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "user_input",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'user_input'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=user_input",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "user_input",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'webdriver_console_two'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=webdriver_console_two",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "webdriver_console_two",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'webdriver_console_two'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=webdriver_console_two",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "webdriver_console_two",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'pseudo_terminal'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=pseudo_terminal",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "pseudo_terminal",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'pseudo_terminal'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=pseudo_terminal",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "pseudo_terminal",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'webdriver_console_one'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=webdriver_console_one",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "webdriver_console_one",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'webdriver_console_one'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=webdriver_console_one",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "webdriver_console_one",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'user_input_simplest'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=user_input_simplest",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "user_input_simplest",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'user_input_simplest'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=user_input_simplest",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "user_input_simplest",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'user_input_what_is_your_name'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=user_input_what_is_your_name",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "user_input_what_is_your_name",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'user_input_what_is_your_name'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=user_input_what_is_your_name",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "user_input_what_is_your_name",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'accept_multiple_commands'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=accept_multiple_commands",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "accept_multiple_commands",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'accept_multiple_commands'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=accept_multiple_commands",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "accept_multiple_commands",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'test_log_level'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=test_log_level",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "test_log_level",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'test_log_level'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=test_log_level",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "test_log_level",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'selenium_example'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=selenium_example",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "selenium_example",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'selenium_example'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=selenium_example",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "selenium_example",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'test'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=test",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "test",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'test'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=test",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "test",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug example 'webdriver_console_three'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--example=webdriver_console_three",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "webdriver_console_three",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug unit tests in example 'webdriver_console_three'",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--no-run",
+                    "--example=webdriver_console_three",
+                    "--package=thirtyfour_webdriver_console"
+                ],
+                "filter": {
+                    "name": "webdriver_console_three",
+                    "kind": "example"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        }
+    ]
+}

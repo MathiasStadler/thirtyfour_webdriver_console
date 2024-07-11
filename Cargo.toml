@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 color-eyre = "0.6.3"
+env = "0.0.0"
 env_logger = "0.11.3"
 log = "0.4.22"
 stdext = "0.3.3"
