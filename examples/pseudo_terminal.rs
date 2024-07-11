@@ -51,7 +51,7 @@ fn main() {
         };
 
         // start with double point like vim
-        if input.starts_with(":") {
+        if input.starts_with(':') {
             execute_command(&input);
         };
 
@@ -64,14 +64,14 @@ fn main() {
         let mut _worker = _cmd.clone();
 
         // FROM HERE - https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
-        if _worker.len() > 0 {
+        if !_worker.is_empty() {
             _worker.remove(0); // remove first
         }
 
         info!("start => execute command => {}", _worker);
 
         if _worker == "xpath" {
-            debug!("command => {}",_worker);
+            debug!("command => {}", _worker);
         }
 
         info!("finished => execute_command");

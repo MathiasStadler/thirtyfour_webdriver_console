@@ -8,8 +8,7 @@ use std::error::Error;
 use std::io::Write;
 use std::process;
 
-
-// 
+//
 use std::env::set_var;
 
 //need for terminal
@@ -25,7 +24,7 @@ use std::thread;
 
 // need for function name
 // use stdext::prelude::*;
-use stdext::function_name;
+// use stdext::function_name;
 // need for thirtyfour
 #[allow(unused_imports)]
 use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDriver, WebElement};
@@ -41,7 +40,6 @@ const WEB_PAGE: &str = "https://wikipedia.org";
 
 fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     color_eyre::install()?;
-
 
     // test for RUST_LOG
     // if env::var("RUST_LOG").is_err() {
@@ -65,9 +63,6 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
                 // chrono::Local::now().format("%Y-%m-%dT%H:%M:%S"),
                 record.level(),
                 record.args(),
-                
-                
-                
             )
         })
         .init();
@@ -93,17 +88,19 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => fn run ");
     // first init driver
     // let _driver = initialize_driver().await?;
-    let _driver = initialize_driver().await.unwrap();
+    // let _driver = initialize_driver().await.unwrap();
 
-    info!("call webpage => {}", WEB_PAGE);
+    // info!("call webpage => {}", WEB_PAGE);
     // _driver.goto(WEB_PAGE).await?;
 
     //_driver.goto(WEB_PAGE).await.unwrap();
-    goto_web_page(_driver.clone(), WEB_PAGE).await.unwrap();
+    // goto_web_page(_driver.clone(), WEB_PAGE).await.unwrap();
     // wait_seconds_of_browser(_driver.clone(), 5).await?;
-    wait_seconds_of_browser(_driver.clone(), 5).await.unwrap();
+    //
+    // wait_seconds_of_browser(_driver.clone(), 5).await.unwrap();
 
-    use_webdriver_console(_driver.clone()).await.unwrap();
+    // use_webdriver_console(_driver.clone()).await.unwrap();
+    use_webdriver_console().await.unwrap();
 
     info!("finished => fn run ");
     Ok(())
@@ -119,15 +116,13 @@ async fn goto_web_page(
     Ok(())
 }
 
-async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
+async fn use_webdriver_console() -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => fn fn use_webdriver_console ");
-    info!("func start => {}",function_name!());
-    info!("func finished => {}",function_name!());
-    wait_seconds_of_browser(_driver.clone(), 10).await?;
+    // info!("func start => {}", function_name!());
+    // info!("func finished => {}", function_name!());
+    // wait_seconds_of_browser(_driver.clone(), 10).await?;
     info!("input start => XPath ");
 
-    
-    
     loop {
         // use the `>` character as the prompt
         // need to explicitly flush this to ensure it prints before read_line
@@ -145,48 +140,71 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
         };
 
         // start with double point like vim
-        if input.starts_with(":") {
-            debug!("enter execute command {}",input);
-           let _ = execute_command(_driver.clone(),&input);
-        };
+        if input.starts_with(':') {
+            debug!("enter execute command {}", input);
+            // NOT WORK
+            // let _ = execute_command(_driver.clone(),&input);
 
-        info!("input => {}", input);
+            // FROM HERE - https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
+            if !input.is_empty() {
+                input.remove(0); // remove first sign the double point
+            }
+
+            info!("start => execute command => {}", input);
+            debug!("start => execute command => {}", input);
+            // FROM HERE
+            // https://stackoverflow.com/questions/70631899/whats-the-proper-way-to-call-a-async-function-in-another-async-function
+            let _ = execute_command(&input).await;
+        };
     }
 
     info!("finished => fn fn use_webdriver_console ");
     Ok(())
 }
 
-async fn execute_command(_driver:WebDriver,_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>> {
-    info!("start => execute_command");
+async fn execute_command(_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>> {
+    info!("start => execute_command -> {}", _cmd);
 
-    // wait_seconds_of_browser(_driver.clone(), 10).await?;
+    let mut _driver:Option<Result<WebDriver, WebDriverError>>= None;
+    //  wait_seconds_of_browser(_driver.clone(), 10).await?;
 
-    // let mut _worker = _cmd.clone();
+    if _cmd == "xpath" {
+        debug!("command => {}", _cmd);
+    }
 
-    // // FROM HERE - https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
-    // if _worker.len() > 0 {
-    //     _worker.remove(0); // remove first
-    // }
+    if _cmd == "init" {
+        debug!("command => {}", _cmd);
 
-    // info!("start => execute command => {}", _worker);
+        _driver = Some(initialize_driver().await);
+    }
 
-    // if _worker == "xpath" {
-    //     debug!("command => {}",_worker);
-    // }
+    if _cmd == "open" {
+        debug!("command => {}", _cmd);
 
-    // if _worker == "close" {
-    //     debug!("command => {}",_worker);
+        let _driver = open_browser().await;
+    }
 
-    //     close_browser(_driver.clone()).await?;
-    // }
+    if _cmd == "close" {
+        debug!("command => {}", _cmd);
 
-    info!("finished => execute_command");
+        // how-i-can-know-if-something-is-initialised-in-rust
+        // https://stackoverflow.com/questions/36363693/how-i-can-know-if-something-is-initialised-in-rust
+
+        // if let Some( _d )= _driver {
+        //     //println!("x has value: {}", value);
+        // let _ = close_browser(_driver.ok_or("close failed")).await;
+        if let Some(_d) = _driver {
+            _d?.quit().await?;
+        }
+        // }
+        // else {
+        //     error!("_d is not set");
+        // }
+    }
+
+    info!("finished => execute_command {}", _cmd);
     Ok(())
 }
-
-
-
 
 // FOUND HERE
 // https://itehax.com/blog/web-scraping-using-rust
@@ -200,10 +218,10 @@ async fn initialize_driver() -> color_eyre::Result<WebDriver, WebDriverError> {
     // caps.add_chrome_arg("--no-sandbox")?;
     //  caps.add_chrome_arg("--disable-dev-shm-usage")?;
 
-    let driver = WebDriver::new("http://localhost:9515", _caps).await?;
-    driver.maximize_window().await?;
+    let _driver = WebDriver::new("http://localhost:9515", _caps).await?;
+    _driver.maximize_window().await?;
     info!("finished => fn initialize_driver ");
-    Ok(driver)
+    Ok(_driver)
 }
 
 async fn wait_seconds_of_browser(
@@ -220,6 +238,16 @@ async fn wait_seconds_of_browser(
     Ok(())
 }
 
+async fn open_browser() -> color_eyre::Result<WebDriver, WebDriverError> {
+    info!("start => fn close_browser ");
+    // Always explicitly close the browser.
+    // _driver.quit().await?;
+    let _driver = initialize_driver().await.unwrap();
+    info!("finished => fn close_browser ");
+
+    Ok(_driver)
+}
+
 async fn close_browser(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => fn close_browser ");
     // Always explicitly close the browser.
@@ -229,8 +257,9 @@ async fn close_browser(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Err
     Ok(())
 }
 
-// RUST_LOG=info cargo run --example webdriver_console_two
+// RUST_LOG=info cargo run --example webdriver_console_three
+// cargo build --example webdriver_console_three
 
-// cargo clippy --fix --allow-dirty --allow-staged
-// cargo fmt -- --emit=files examples/webdriver_console_two.rs
+// cargo clippy --fix --allow-dirty --allow-staged examples/webdriver_console_three.rs
+// cargo fmt -- --emit=files examples/webdriver_console_three.rs
 // cargo check --workspace
