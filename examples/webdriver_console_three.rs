@@ -137,10 +137,10 @@ async fn use_webdriver_console() -> color_eyre::Result<(), Box<dyn Error>> {
         // shell exit
         if input == "exit" {
             break;
-        };
+        } 
 
         // start with double point like vim
-        if input.starts_with(':') {
+        else if input.starts_with(':') {
             debug!("enter execute command {}", input);
             // NOT WORK
             // let _ = execute_command(_driver.clone(),&input);
@@ -150,12 +150,15 @@ async fn use_webdriver_console() -> color_eyre::Result<(), Box<dyn Error>> {
                 input.remove(0); // remove first sign the double point
             }
 
-            info!("start => execute command => {}", input);
+            // info!("start => execute command => {}", input);
             debug!("start => execute command => {}", input);
             // FROM HERE
             // https://stackoverflow.com/questions/70631899/whats-the-proper-way-to-call-a-async-function-in-another-async-function
             let _ = execute_command(&input).await;
-        };
+        }
+        else{
+            println!("{}",input);
+        }
     }
 
     info!("finished => fn fn use_webdriver_console ");
@@ -165,7 +168,7 @@ async fn use_webdriver_console() -> color_eyre::Result<(), Box<dyn Error>> {
 async fn execute_command(_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => execute_command -> {}", _cmd);
 
-    let mut _driver:Option<Result<WebDriver, WebDriverError>>= None;
+    let mut _driver: Option<Result<WebDriver, WebDriverError>> = None;
     //  wait_seconds_of_browser(_driver.clone(), 10).await?;
 
     if _cmd == "xpath" {
@@ -175,7 +178,15 @@ async fn execute_command(_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>
     if _cmd == "init" {
         debug!("command => {}", _cmd);
 
-        _driver = Some(initialize_driver().await);
+        if let Some(ref _d) = _driver {
+
+            debug!("_driver init => ok");
+        }
+        else{
+            info!("init_driver");
+            _driver = Some(initialize_driver().await); 
+        }
+        
     }
 
     if _cmd == "open" {
@@ -192,16 +203,14 @@ async fn execute_command(_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>
 
         // if let Some( _d )= _driver {
         //     //println!("x has value: {}", value);
-        // let _ = close_browser(_driver.ok_or("close failed")).await;
+
         if let Some(_d) = _driver {
             _d?.quit().await?;
+        } else {
+            error!("_driver NOT set");
         }
-        // }
-        // else {
-        //     error!("_d is not set");
-        // }
     }
-
+   
     info!("finished => execute_command {}", _cmd);
     Ok(())
 }
