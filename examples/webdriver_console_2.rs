@@ -19,22 +19,39 @@ use log::{debug, error, info, log_enabled, Level};
 use std::error::Error;
 // use std::fs::File;
 use std::io::Write;
+
+#[allow(unused_imports)]
 use std::process;
 
 use std::thread;
 use std::time::Duration;
 
 use std::env::set_var;
+
+use std::fmt;
+
 use thirtyfour::ChromiumLikeCapabilities;
 #[allow(unused_imports)]
 use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDriver, WebElement};
 
-const WEB_PAGE: &str = "https://wikipedia.org";
-
 pub type WebDriverResult<T> = Result<T, WebDriverError>;
+
+#[derive(Debug)]
+struct MyError(String);
+
+impl fmt::Display for MyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "There is an error: {}", self.0)
+    }
+}
+
+
+
 
 fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     color_eyre::install()?;
+
+    
 
     // set default log level
     set_var("RUST_LOG", "debug");
@@ -61,19 +78,19 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     error!("RUST_LOG maybe NOT enable");
     error!("Used: => RUST_LOG=info < prg >");
 
-    let rt: tokio::runtime::Runtime = tokio::runtime::Builder::new_current_thread()
-        .enable_all()
-        .build()?;
-    let _ = rt.block_on(run());
+    return Err(Box::new(MyError("Here => Oops".into())));
 
-    info!("env_logger: ended");
-    process::exit(0);
+    // let rt: tokio::runtime::Runtime = tokio::runtime::Builder::new_current_thread()
+    //     .enable_all()
+    //     .build()?;
+    // let _ = rt.block_on(run());
+
+    // info!("env_logger: ended");
+    // process::exit(0);
 }
 
 async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     let _driver = initialize_driver().await?;
-
-    _driver.goto(WEB_PAGE).await?;
 
     // thread::sleep(Duration::from_secs(10));
     wait_seconds_of_browser(_driver.clone(), 10).await?;
@@ -86,10 +103,10 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
 }
 
 async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
-    info!("start => fn fn use_webdriver_console ");
+    info!("start => fn use_webdriver_console ");
     wait_seconds_of_browser(_driver.clone(), 10).await?;
 
-    info!("finished => fn fn use_webdriver_console ");
+    info!("finished => fn use_webdriver_console ");
     Ok(())
 }
 
@@ -157,7 +174,7 @@ fn print_type<T>(_: &T) {
 /*
 rustfmt --edition 2024 ./examples/webdriver_console_1.rs
 
-cargo build --example webdriver_console_1
+cargo build --example webdriver_console_2
 
-cargo run --example webdriver_console_1
+cargo run --example webdriver_console_2
 */
