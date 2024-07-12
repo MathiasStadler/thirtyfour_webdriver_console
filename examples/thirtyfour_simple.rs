@@ -17,7 +17,7 @@ use log::{debug, error, info, log_enabled, Level};
 // use async_recursion::async_recursion;
 
 use std::error::Error;
-use std::fs::File;
+// use std::fs::File;
 use std::io::Write;
 use std::process;
 
@@ -148,4 +148,6 @@ fn print_type<T>(_: &T) {
 rustfmt  ./examples/thirtyfour_simple
 
 cargo build --example thirtyfour_simple
+
+cargo run --example thirtyfour_simple
 */
