@@ -204,6 +204,9 @@ async fn execute_command(_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>
         // if let Some( _d )= _driver {
         //     //println!("x has value: {}", value);
 
+
+        // _driver.quit().await?;
+
         if let Some(_d) = _driver {
             _d?.quit().await?;
         } else {
