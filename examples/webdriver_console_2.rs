@@ -50,8 +50,6 @@ impl Error for MyError {}
 fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     color_eyre::install()?;
 
-    
-
     // set default log level
     set_var("RUST_LOG", "debug");
 
