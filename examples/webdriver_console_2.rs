@@ -1,3 +1,4 @@
+pub mod lib;
 // update here
 // RUN PRG /W full log output
 // RUST_LOG=debug cargo run --example thirtyfour_get_margin_data_twenty_four 2>&1 | tee output1.txt
@@ -109,7 +110,7 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
 
 async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => fn use_webdriver_console ");
-    wait_seconds_of_browser(_driver.clone(), 10).await?;
+    wait_seconds_of_browser(_driver.clone(), 5).await?;
 
     // interactive modus
     loop {
@@ -130,7 +131,7 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
 
         // command start with double point like vim
         else if input.starts_with(':') {
-            debug!("eneter command modus");
+            debug!("enter command modus");
             debug!("leaved command modus");
 
 

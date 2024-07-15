@@ -1,8 +1,10 @@
 {
     "cSpell.words": [
+        "RUSTFLAGS",
         "rustfmt",
         "stdext",
-        "thirtyfour"
+        "thirtyfour",
+        "Wunused"
     ]
 
 }
