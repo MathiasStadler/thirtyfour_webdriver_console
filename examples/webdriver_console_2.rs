@@ -186,30 +186,29 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
 async fn execute_command(_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => execute_command -> {}", _cmd);
 
+    let _driver: _driver::WebDriver;
 
-    let _driver:Result<WebDriver, WebDriverError> = None;
-    
     //init webdriver
     if _cmd == "init" {
         debug!("init webdriver {}", _cmd);
-        if check_driver(_driver).await.is_ok() {
-            let _initialize_driver_result  =
-            _initialize_driver_result().await;
-                _driver = match result_initialize_driver {
-                Ok(()) => (),
-                Err(_err) => {
-                    return Err(Box::new(MyError(
-                        "Error result_initialize_driver => {_e}".to_string(),
-                    ))
-                    .into())
-                }
-            };
-        }// if (check_driver().await) {
+        // if check_driver(_driver).await.is_ok() {
+        let _result_initialize_driver::<Result<WebDriver, WebDriverError>> = initialize_driver().await;
+
+        let _driver::WebDriver = match _result_initialize_driver {
+            Ok(_driver)  => _driver,
+            Err(_err) => {
+                return Err(Box::new(MyError(
+                    "Error result_initialize_driver => {_e}".to_string(),
+                ))
+                .into())
+            }
+        };
+        //  }// if (check_driver().await) {
     } else if _cmd == "close" {
         debug!("close => browser  {}", _cmd);
-        if check_driver().await {
+        if check_driver(_driver).await.is_ok() {
             let result_close_browser: Result<WebDriver, WebDriverError> =
-                close_browser(_driver).await;
+                close_browser(_driver?).await;
         }
     } else {
         info!("command noz found => {}", _cmd);
@@ -221,22 +220,21 @@ async fn execute_command(_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>
 
 async fn check_driver(_driver: WebDriver) -> color_eyre::Result<WebDriver, WebDriverError> {
     if let Some(_d) = _driver {
-        
-        return Ok(_d)
+        return Ok(_d);
     } else {
         error!("_driver NOT set");
-        return Err(_d)
+        // return Err(_d)
     }
 
     // Ok(())
 }
 
-async fn close_browser(_driver: WebDriver) -> color_eyre::Result<WebDriver, WebDriverError> {
-    // Always explicitly close the browser.
-    _driver.quit().await?;
+// async fn close_browser(_driver: WebDriver) -> color_eyre::Result<WebDriver, WebDriverError> {
+//     // Always explicitly close the browser.
+//     _driver.quit().await?;
 
-    Ok(())
-}
+//     Ok(())
+// }
 
 // https://github.com/stevepryde/thirtyfour/issues/4?ref=https://githubhelp.com
 //
