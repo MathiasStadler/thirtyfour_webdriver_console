@@ -139,7 +139,7 @@ async fn use_webdriver_console() -> color_eyre::Result<(), Box<dyn Error>> {
             break;
         } 
 
-        // start with double point like vim
+        // command start with double point like vim
         else if input.starts_with(':') {
             debug!("enter execute command {}", input);
             // NOT WORK

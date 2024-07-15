@@ -126,8 +126,17 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
         // shell exit
         if input == "exit" {
             break;
-        }
-    }
+        }//end if input == "exit" 
+
+        // command start with double point like vim
+        else if input.starts_with(':') {
+            debug!("eneter command modus");
+            debug!("leaved command modus");
+
+
+
+        }// else if input.starts_with(':')
+    }// end loop
 
     info!("finished => fn use_webdriver_console ");
     Ok(())
