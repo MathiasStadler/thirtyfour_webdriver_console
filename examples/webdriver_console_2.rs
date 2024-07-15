@@ -116,7 +116,7 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     };
 
     // thread::sleep(Duration::from_secs(10));
-    wait_seconds_of_browser(_driver.clone(), 10).await?;
+    wait_seconds_of_browser(_driver.clone(), 5).await?;
 
     use_webdriver_console(_driver.clone()).await.unwrap();
 
@@ -149,8 +149,33 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
 
         // command start with double point like vim
         else if input.starts_with(':') {
-            debug!("enter command modus");
-            debug!("leaved command modus");
+            debug!("found command input => {}", input);
+            //extract plain command
+            // FROM HERE -
+            // https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
+            if !input.is_empty() {
+                if input.len() > 1 {
+                    input.remove(0); // remove first sign the double point
+                    debug!("plain command => {}", input);
+
+                    let _execute_command_result = execute_command(&input).await;
+
+                    let _ = match _execute_command_result {
+                        //everything is fine
+                        Ok(()) => (),
+                        Err(_e) => {
+                            return Err(Box::new(MyError(
+                                "Error _execute_command => {_e}".to_string(),
+                            ))
+                            .into())
+                        }
+                    };
+                } else {
+                    debug!("plain command only double point  => {}", input);
+                }
+            }
+
+            debug!("leave command modus => {}", input);
         } // else if input.starts_with(':')
     } // end loop
 
@@ -158,7 +183,55 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
     Ok(())
 }
 
-async fn close_browser(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
+async fn execute_command(_cmd: &String) -> color_eyre::Result<(), Box<dyn Error>> {
+    info!("start => execute_command -> {}", _cmd);
+
+
+    let _driver:Result<WebDriver, WebDriverError> = None;
+    
+    //init webdriver
+    if _cmd == "init" {
+        debug!("init webdriver {}", _cmd);
+        if check_driver(_driver).await.is_ok() {
+            let _initialize_driver_result  =
+            _initialize_driver_result().await;
+                _driver = match result_initialize_driver {
+                Ok(()) => (),
+                Err(_err) => {
+                    return Err(Box::new(MyError(
+                        "Error result_initialize_driver => {_e}".to_string(),
+                    ))
+                    .into())
+                }
+            };
+        }// if (check_driver().await) {
+    } else if _cmd == "close" {
+        debug!("close => browser  {}", _cmd);
+        if check_driver().await {
+            let result_close_browser: Result<WebDriver, WebDriverError> =
+                close_browser(_driver).await;
+        }
+    } else {
+        info!("command noz found => {}", _cmd);
+    }
+
+    info!("finished => execute_command -> {}", _cmd);
+    Ok(())
+}
+
+async fn check_driver(_driver: WebDriver) -> color_eyre::Result<WebDriver, WebDriverError> {
+    if let Some(_d) = _driver {
+        
+        return Ok(_d)
+    } else {
+        error!("_driver NOT set");
+        return Err(_d)
+    }
+
+    // Ok(())
+}
+
+async fn close_browser(_driver: WebDriver) -> color_eyre::Result<WebDriver, WebDriverError> {
     // Always explicitly close the browser.
     _driver.quit().await?;
 
@@ -210,6 +283,15 @@ async fn initialize_driver() -> Result<WebDriver, WebDriverError> {
     driver.maximize_window().await?;
     info!("initialize_driver - end");
     Ok(driver)
+}
+
+async fn close_browser(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
+    info!("start => fn close_browser ");
+    // Always explicitly close the browser.
+    _driver.quit().await?;
+    info!("finished => fn close_browser ");
+
+    Ok(())
 }
 
 // FROM HERE
