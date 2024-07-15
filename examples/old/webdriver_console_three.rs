@@ -1,3 +1,6 @@
+// pub mod lib;
+// #[warn(special_module_name)]
+
 // #[warn(unused_extern_crates)]
 // #[warn(dead_code)]
 // use START
