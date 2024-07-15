@@ -36,6 +36,7 @@ use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDrive
 use color_eyre::Result;
 use std::fmt;
 
+// const WEB_PAGE: &str = "https://wikipedia.org";
 const WEB_PAGE: &str = "https://wikipedia.org";
 
 pub type WebDriverResult<T> = Result<T, WebDriverError>;
@@ -89,19 +90,10 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
 }
 
 async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
-    // let _driver = initialize_driver().await?;
-
-    // old can remove
-    // _driver.goto(WEB_PAGE).await?;
-
-    // thread::sleep(Duration::from_secs(10));
-    //old can remove
-    // wait_seconds_of_browser(_driver.clone(), 5).await?;
-
     let _result_webdriver_console = use_webdriver_console().await;
 
     let _ = match _result_webdriver_console {
-        Ok(()) => () ,
+        Ok(()) => (),
         Err(_err) => {
             return Err(Box::new(MyError(
                 "Error result_initialize_driver => {_e}".to_string(),
@@ -110,79 +102,88 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
         }
     };
 
-    // can remove 
-    // close_browser(_driver.clone()).await?;
-
     Ok(())
 }
 
 async fn use_webdriver_console() -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => use_webdriver_console ");
-    
-    // can remove 
-    // wait_seconds_of_browser(_driver.clone(), 5).await?;
+
+
+    // NEED WE HERE async ??
+    // async call async
+    // https://rust-lang.github.io/async-book/01_getting_started/04_async_await_primer.html
 
     // interactive modus
     // loop {
-       
-    // init console
-    let result_init_driver = init_driver().await;
-    let _driver::<WebDriver,WebDriverError> = match result_init_driver {
+    // if (true){
 
-        Ok(_driver::WebDriver) => Ok(_driver),
-        Err(_e::WebDriverError) => Err(_e),
-        
+    // init console
+    let result_init_driver =  init_driver().await;
+    let _driver = match result_init_driver {
+        Ok(_driver) => _driver,
+        Err(_e) => _e,
     };
 
-       
-        print!("> ");
-        let _ = stdout().flush();
+    // loop {
+    //     print!("> ");
+    //     let _ = stdout().flush();
 
-        let mut input = String::new();
-        stdin().read_line(&mut input).unwrap();
+    //     let mut input = String::new();
+    //     stdin().read_line(&mut input).unwrap();
 
-        input = input.trim().to_string();
+    //     input = input.trim().to_string();
 
-        debug!("input => {}", input);
+    //     debug!("input => {}", input);
 
-        // shell exit
-        //if input == "exit" {
-          //  break;
-        //}
-        // command start with double point like vim
-        if input.starts_with(':') {
-            debug!("found command input => {}", input);
-            //extract plain command
-            // FROM HERE -
-            // https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
-            if !input.is_empty() {
-                if input.len() > 1 {
-                    input.remove(0); // remove first sign the double point
-                    debug!("plain command => {}", input);
+    //     // shell exit
+    //     //if input == "exit" {
+    //     //  break;
+    //     //}
+    //     // command start with double point like vim
+    //     if input.starts_with(':') {
+    //         debug!("found command input => {}", input);
+    //         //extract plain command
+    //         // FROM HERE -
+    //         // https://stackoverflow.com/questions/65976432/how-to-remove-first-and-last-character-of-a-string-in-rust
+    //         if !input.is_empty() {
+    //             if input.len() > 1 {
+    //                 input.remove(0); // remove first sign the double point
+    //                 debug!("plain command => {}", input);
 
-                    let _execute_command_result = execute_command(&input).await;
+    //                 let _execute_command_result = execute_command(&input).await;
 
-                    let _ = match _execute_command_result {
-                        //everything is fine
-                        Ok(()) => (),
-                        Err(_e) => {
-                            return Err(Box::new(MyError(
-                                "Error _execute_command => {_e}".to_string(),
-                            ))
-                            .into())
-                        }
-                    };
-                } else {
-                    debug!("only double point without command  => {}", input);
-                }
-            }
+    //                 let _ = match _execute_command_result {
+    //                     //everything is fine
+    //                     Ok(()) => (),
+    //                     Err(_e) => {
+    //                         return Err(Box::new(MyError(
+    //                             "Error _execute_command => {_e}".to_string(),
+    //                         ))
+    //                         .into())
+    //                     }
+    //                 };
+    //             } else {
+    //                 debug!("only double point without command  => {}", input);
+    //             }
+    //         }
 
-            debug!("leave command modus => {}", input);
-        } // else if input.starts_with(':')
+    //         debug!("leave command modus => {}", input);
+    //     } // else if input.starts_with(':')
 
-
+    //     // }//end of if(true)
     // } // end of interactive loop
-      //end if input == "exit"
+    //end if input == "exit"
+
+    let result_close_browser = close_browser(WebDriver);
+    let _ = match result_close_browser.await {
+        Ok(_) => info!("Close browser fine"),
+        Err(_e) => {
+            return Err(Box::new(MyError(
+                "Error _execute_command close browser  => {_e}".to_string(),
+            ))
+            .into())
+        }
+    };
 
     info!("finished => use_webdriver_console ");
     Ok(())
@@ -244,13 +245,12 @@ async fn init_driver() -> Result<WebDriver, WebDriverError> {
     _caps.add_arg("--remote-debugging-pipe")?;
     _caps.add_arg("--no-sandbox")?;
 
-    let result_driver::<Result<WebDriver::WebDriverError>> =
-        WebDriver::new("http://localhost:9515", _caps).await;
+    let result_driver = WebDriver::new("http://localhost:9515", _caps).await;
 
     // let result = WebDriver::new("http://localhost:4444/wd/hub", &caps).await;
-    let driver::WebDriver = match result_driver {
-        Ok(_driver::<WebDriver>) => _driver,
-        Err(_error::<WebDriverError>) => return Err(_error),
+    let driver = match result_driver {
+        Ok(_driver) => _driver,
+        Err(_e) => return Err(_e),
     };
 
     driver.maximize_window().await?;
