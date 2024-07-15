@@ -45,8 +45,7 @@ impl fmt::Display for MyError {
     }
 }
 
-
-
+impl Error for MyError {}
 
 fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     color_eyre::install()?;
@@ -78,7 +77,8 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     error!("RUST_LOG maybe NOT enable");
     error!("Used: => RUST_LOG=info < prg >");
 
-    return Err(Box::new(MyError("Here => Oops".into())));
+    // for later
+    // return Err(Box::new(MyError("Here => Oops".into())));
 
     // let rt: tokio::runtime::Runtime = tokio::runtime::Builder::new_current_thread()
     //     .enable_all()
@@ -87,6 +87,8 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
 
     // info!("env_logger: ended");
     // process::exit(0);
+
+    Ok(())
 }
 
 async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
