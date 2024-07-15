@@ -30,6 +30,9 @@ use std::env::set_var;
 
 use std::fmt;
 
+use std::io::stdin;
+use std::io::stdout;
+
 use thirtyfour::ChromiumLikeCapabilities;
 #[allow(unused_imports)]
 use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDriver, WebElement};
@@ -37,6 +40,7 @@ use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDrive
 pub type WebDriverResult<T> = Result<T, WebDriverError>;
 
 #[derive(Debug)]
+#[allow(dead_code)]
 struct MyError(String);
 
 impl fmt::Display for MyError {
@@ -78,15 +82,16 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     // for later
     // return Err(Box::new(MyError("Here => Oops".into())));
 
-    // let rt: tokio::runtime::Runtime = tokio::runtime::Builder::new_current_thread()
-    //     .enable_all()
-    //     .build()?;
-    // let _ = rt.block_on(run());
+    let rt: tokio::runtime::Runtime = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()?;
+    let _ = rt.block_on(run());
 
-    // info!("env_logger: ended");
-    // process::exit(0);
+    info!("env_logger: ended");
+    process::exit(0);
 
-    Ok(())
+    // unreachable expression
+    // Ok(())
 }
 
 async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
@@ -105,6 +110,24 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
 async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => fn use_webdriver_console ");
     wait_seconds_of_browser(_driver.clone(), 10).await?;
+
+    // interactive modus
+    loop {
+        print!("> ");
+        let _ = stdout().flush();
+
+        let mut input = String::new();
+        stdin().read_line(&mut input).unwrap();
+
+        input = input.trim().to_string();
+
+        debug!("input => {}", input);
+
+        // shell exit
+        if input == "exit" {
+            break;
+        }
+    }
 
     info!("finished => fn use_webdriver_console ");
     Ok(())
