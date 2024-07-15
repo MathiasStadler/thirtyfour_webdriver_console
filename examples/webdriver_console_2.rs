@@ -1,5 +1,3 @@
-// pub mod lib;
-// update here
 // RUN PRG /W full log output
 // RUST_LOG=debug cargo run --example thirtyfour_get_margin_data_twenty_four 2>&1 | tee output1.txt
 
@@ -10,6 +8,7 @@
 // env_logger
 // RUST_LOG=info ./main
 
+use color_eyre::eyre::Result;
 // thirtyfour 2024
 // https://www.zenrows.com/blog/rust-selenium#install-selenium
 #[allow(unused_imports)]
@@ -41,7 +40,7 @@ use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDrive
 pub type WebDriverResult<T> = Result<T, WebDriverError>;
 
 #[derive(Debug)]
-#[allow(dead_code)]
+// #[allow(dead_code)]
 struct MyError(String);
 
 impl fmt::Display for MyError {
@@ -95,8 +94,26 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
     // Ok(())
 }
 
+// async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
+//     let _driver = initialize_driver().await?;
+
+//     // thread::sleep(Duration::from_secs(10));
+//     wait_seconds_of_browser(_driver.clone(), 10).await?;
+
+//     use_webdriver_console(_driver.clone()).await.unwrap();
+
+//     close_browser(_driver.clone()).await?;
+
+//     Ok(())
+// }
+
 async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
-    let _driver = initialize_driver().await?;
+    let _driver_result: Result<WebDriver, WebDriverError> = initialize_driver().await;
+
+    let _driver = match _driver_result {
+        Ok(webdriver) => webdriver,
+        Err(_e) => return Err(Box::new(MyError("WebDriverError => {_e}".to_string())).into()),
+    };
 
     // thread::sleep(Duration::from_secs(10));
     wait_seconds_of_browser(_driver.clone(), 10).await?;
@@ -127,17 +144,15 @@ async fn use_webdriver_console(_driver: WebDriver) -> color_eyre::Result<(), Box
         // shell exit
         if input == "exit" {
             break;
-        }//end if input == "exit" 
+        }
+        //end if input == "exit"
 
         // command start with double point like vim
         else if input.starts_with(':') {
             debug!("enter command modus");
             debug!("leaved command modus");
-
-
-
-        }// else if input.starts_with(':')
-    }// end loop
+        } // else if input.starts_with(':')
+    } // end loop
 
     info!("finished => fn use_webdriver_console ");
     Ok(())
