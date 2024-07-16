@@ -251,12 +251,23 @@ async fn path_to(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
                 "Action START =>  ACTION_FORM_FILL_FIELD ({})",
                 WEB_XPATH[field][1]
             );
-            let elem_form: WebElement = _driver.find(By::XPath(WEB_XPATH[field][3])).await?;
+            let result_elem_form: Result<WebElement, WebDriverError> = _driver.find(By::XPath(WEB_XPATH[field][3])).await;
+            let elem_form = match result_elem_form {
+                Ok(_web_element) => {
+                    debug!(r#"ACTION_FORM_FILL_FIELD_WITH_SELECT=> web_element found"#);
+                    _web_element
+                }
+                Err(e) => {
+                    debug!(r#"Error web_element NOT found"#);
+                    eprintln!("Error {}", e);
+                    continue;
+                }
+            };
             debug!("\t send_keys {}", WEB_XPATH[field][2]);
             elem_form.send_keys(WEB_XPATH[field][2]).await?;
             debug!("\t select field");
             // elem_form.send_keys(Key::Enter).await?;
-            debug!("\t press enter");
+            // debug!("\t press enter");
 
             wait_seconds_of_browser(_driver.clone(), 5).await?;
             debug!(
