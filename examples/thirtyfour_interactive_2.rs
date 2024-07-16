@@ -136,7 +136,7 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     thread::sleep(Duration::from_secs(5));
 
     path_to(_driver.clone()).await?;
-    save_table_to_file_first(_driver.clone()).await?;
+    // save_table_to_file_first(_driver.clone()).await?;
     // close_browser(_driver.clone()).await?;
 
     Ok(())
