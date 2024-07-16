@@ -34,6 +34,7 @@ use color_eyre::Result;
 use std::fmt;
 
 use thirtyfour::ChromiumLikeCapabilities;
+#[allow(unused_imports)]
 use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDriver, WebElement};
 
 // const DEBUG_VEC: bool = false;
@@ -142,12 +143,17 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
 
 async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     let _place: &str = "Place";
-    let _driver = initialize_driver().await?;
+
+    // ************
+    // HERE
+    // **************
+    // let _driver = initialize_driver().await?;
 
     // _driver.goto(WEB_PAGE).await?;
     thread::sleep(Duration::from_secs(5));
 
-    path_to(_driver.clone()).await?;
+    // path_to(_driver.clone()).await?;
+    path_to().await?;
     // save_table_to_file_first(_driver.clone()).await?;
     // close_browser(_driver.clone()).await?;
 
@@ -175,9 +181,20 @@ async fn wait_seconds_of_browser(
     Ok(())
 }
 
-async fn action_interactive(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
+async fn wait_seconds_of_browser_wo_driver(
+    waiting_period: u64,
+) -> color_eyre::Result<(), Box<dyn Error>> {
+    // debug!("wait for page completed load => wait for status from chrome driver");
+    // debug!("driver=> {:?}", _driver.status().await?);
+    debug!("Thread sleep for {} seconds", waiting_period);
+    thread::sleep(Duration::from_secs(waiting_period));
+    Ok(())
+}
+
+// async fn action_interactive(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
+async fn action_interactive() -> color_eyre::Result<(), Box<dyn Error>> {
     debug!("wait for page completed load => wait for status from chrome driver");
-    debug!("driver=> {:?}", _driver.status().await?);
+    // debug!("driver=> {:?}", _driver.status().await?);
     loop {
         print!("> ");
         let _ = stdout().flush();
@@ -202,7 +219,7 @@ async fn action_interactive(_driver: WebDriver) -> color_eyre::Result<(), Box<dy
                     input.remove(0); // remove first sign, the double point
                     debug!("plain command => {}", input);
 
-                    let _execute_command_result = execute_command(&_driver, &input).await;
+                    let _execute_command_result = execute_command(&input).await;
 
                     let _ = match _execute_command_result {
                         //everything is fine
@@ -229,20 +246,24 @@ async fn action_interactive(_driver: WebDriver) -> color_eyre::Result<(), Box<dy
     Ok(())
 }
 
-async fn execute_command(
-    driver: &WebDriver,
-    cmd: &String,
-) -> color_eyre::Result<(), Box<dyn Error>> {
+async fn execute_command<T>(cmd: &String) -> color_eyre::Result<(), Box<dyn Error>> {
     info!("start => execute_command -> {}", cmd);
 
     // debug!("execute_command  _cmd => {}", cmd);
 
-    if cmd == "init" {
-        debug!("execute_command  _cmd => {}",cmd);
+    let _driver:Result<WebDriver, WebDriverError>;
 
-        // let _result_init_driver = init_driver();
-    } else if cmd == "close" {
-        let result_close_browser = close_browser(driver.clone()).await;
+    // if cmd == "init" {
+    //     debug!("execute_command  _cmd => {}", cmd);
+
+    //     let result_initialize_driver = initialize_driver().await;
+    //     let _driver = match result_initialize_driver {
+    //         Ok(value) => value,
+    //         Err(_e) => return Err(Box::new(_e)),
+    //     };
+    // } else 
+    if cmd == "close" {
+        let result_close_browser = close_browser(_driver.clone()).await;
         let _ = match result_close_browser {
             Ok(_web_element) => {
                 info!(r#"ACTION_BROWSER_CLOSE => Ok"#);
@@ -256,7 +277,7 @@ async fn execute_command(
     } else if cmd == "open" {
         debug!("execute_command  cmd => {}", cmd);
 
-        let result_driver_goto = driver.goto("https://wikipedia.org").await;
+        let result_driver_goto = _driver.goto("https://wikipedia.org").await;
         let _ = match result_driver_goto {
             Ok(_web_element) => {
                 info!("ACTION_BROWSER_OPEN => open webpage");
@@ -281,10 +302,11 @@ async fn execute_command(
     Ok(())
 }
 
-async fn path_to(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
+// async fn path_to(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
+async fn path_to() -> color_eyre::Result<(), Box<dyn Error>> {
     info!("method START => path_to");
 
-    wait_seconds_of_browser(_driver.clone(), 5).await?;
+    wait_seconds_of_browser_wo_driver(5).await?;
 
     debug!("XPATH => Browser steps {}", WEB_XPATH.len());
 
@@ -293,119 +315,17 @@ async fn path_to(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
         debug!("\tAction => {}", WEB_XPATH[field][1]);
         debug!("\tField => {}", WEB_XPATH[field][2]);
 
-        // if ACTION_BROWSER_CLOSE == WEB_XPATH[field][1] {
-        //     debug!(
-        //         "Action START =>  ACTION_BROWSER_CLOSE ({})",
-        //         WEB_XPATH[field][1]
-        //     );
-        //     let result_close_browser = close_browser(_driver.clone()).await;
-        //     let _ = match result_close_browser {
-        //         Ok(_web_element) => {
-        //             info!(r#"ACTION_BROWSER_CLOSE => Ok"#);
-        //         }
-        //         Err(_e) => {
-        //             error!(r#"ACTION_BROWSER_CLOSE => Err {_e}"#);
-
-        //             continue;
-        //         }
-        //     };
-        // }
-
         if ACTION_INTERACTIVE == WEB_XPATH[field][1] {
             debug!(
                 "Action START =>  ACTION_INTERACTIVE ({})",
                 WEB_XPATH[field][1]
             );
-            action_interactive(_driver.clone()).await?;
-        }
-        // https://stackoverflow.com/questions/45183797/element-not-interactable-exception-in-selenium-web-automation
-        else if ACTION_CLICK_INTERACTABLE == WEB_XPATH[field][1] {
-            debug!(
-                "Action START =>  ACTION_CLICK_INTERACTABLE ({})",
-                WEB_XPATH[field][1]
-            );
-            wait_seconds_of_browser(_driver.clone(), 5).await?;
-            let elem_form: WebElement = _driver.find(By::XPath(WEB_XPATH[field][3])).await?;
-            elem_form.click().await?;
-            // wait_seconds_of_browser(_driver.clone(), 10).await?;
-            debug!(
-                "Action FINISH =>  ACTION_CLICK_INTERACTABLE ({})",
-                WEB_XPATH[field][1]
-            );
-        } else if ACTION_CLICK == WEB_XPATH[field][1] {
-            debug!("Action START =>  ACTION_CLICK ({})", WEB_XPATH[field][1]);
-
-            wait_seconds_of_browser(_driver.clone(), 5).await?;
-
-            let elem_form_result: Result<WebElement, WebDriverError> =
-                _driver.find(By::XPath(WEB_XPATH[field][3])).await;
-
-            let elem_form = match elem_form_result {
-                Ok(_web_element) => {
-                    debug!(r#"ACTION_CLICK => web_element found"#);
-                    _web_element
-                }
-                Err(e) => {
-                    debug!(r#"Error web_element found"#);
-                    eprintln!("Error {}", e);
-                    continue;
-                }
-            };
-
-            //click web element
-            elem_form.click().await?;
-            debug!("Action FINISH =>  ACTION_CLICK ({})", WEB_XPATH[field][1]);
-        } else if ACTION_FORM_FILL_FIELD == WEB_XPATH[field][1] {
-            debug!(
-                "Action START =>  ACTION_FORM_FILL_FIELD ({})",
-                WEB_XPATH[field][1]
-            );
-
-            let elem_form: WebElement = _driver.find(By::XPath(WEB_XPATH[field][3])).await?;
-            debug!("\tDEBUG => send_keys {}", WEB_XPATH[field][2]);
-            elem_form.send_keys(WEB_XPATH[field][2]).await?;
-            debug!("\tDEBUG => press enter");
-            elem_form.send_keys(Key::Enter).await?;
-            wait_seconds_of_browser(_driver.clone(), 5).await?;
-            debug!(
-                "Action FINISHED =>  ACTION_FORM_FILL_FIELD ({})",
-                WEB_XPATH[field][1]
-            );
-        } else if ACTION_FORM_FILL_FIELD_WITH_SELECT == WEB_XPATH[field][1] {
-            debug!(
-                "Action START =>  ACTION_FORM_FILL_FIELD ({})",
-                WEB_XPATH[field][1]
-            );
-            let result_elem_form: Result<WebElement, WebDriverError> =
-                _driver.find(By::XPath(WEB_XPATH[field][3])).await;
-            let elem_form = match result_elem_form {
-                Ok(_web_element) => {
-                    debug!(r#"ACTION_FORM_FILL_FIELD_WITH_SELECT=> web_element found"#);
-                    _web_element
-                }
-                Err(e) => {
-                    debug!(r#"Error web_element NOT found"#);
-                    eprintln!("Error {}", e);
-                    continue;
-                }
-            };
-            debug!("\t send_keys {}", WEB_XPATH[field][2]);
-            elem_form.send_keys(WEB_XPATH[field][2]).await?;
-            debug!("\t select field");
-            // elem_form.send_keys(Key::Enter).await?;
-            // debug!("\t press enter");
-
-            wait_seconds_of_browser(_driver.clone(), 5).await?;
-            debug!(
-                "Action FINISH =>  ACTION_FORM_FILL_FIELD ({})",
-                WEB_XPATH[field][1]
-            );
-        } else if ACTION_FORM_FILL_FIELD_WITH_SELECT == WEB_XPATH[field][1] {
-            // empty
+            // action_interactive(_driver.clone()).await?;
+            action_interactive().await?;
         }
     }
 
-    wait_seconds_of_browser(_driver.clone(), 5).await?;
+    wait_seconds_of_browser_wo_driver(5).await?;
 
     Ok(())
 }
