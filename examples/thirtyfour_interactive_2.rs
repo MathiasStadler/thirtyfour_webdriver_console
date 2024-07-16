@@ -28,6 +28,9 @@ use std::process;
 use std::thread;
 use std::time::Duration;
 
+use std::io::stdin;
+use std::io::stdout;
+
 use thirtyfour::ChromiumLikeCapabilities;
 use thirtyfour::{prelude::WebDriverError, By, DesiredCapabilities, Key, WebDriver, WebElement};
 
@@ -57,12 +60,7 @@ const WEB_XPATH: &[&[&str]] = &[
         STOCK_SYMBOL,
         "/html/body/div[1]/div[2]/div[2]/div[2]/div/form/div[1]/div[1]/span[1]/input",
     ],
-    &[
-        "1",
-        ACTION_BROWSER_CLOSE,
-        "",
-        "",
-    ],
+    &["1", ACTION_BROWSER_CLOSE, "", ""],
     // &[
     //     "1",
     //     ACTION_FORM_FILL_FIELD_WITH_SELECT,
@@ -134,8 +132,8 @@ async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     let _place: &str = "Place";
     let _driver = initialize_driver().await?;
 
-    _driver.goto(WEB_PAGE).await?;
-    thread::sleep(Duration::from_secs(4));
+    // _driver.goto(WEB_PAGE).await?;
+    thread::sleep(Duration::from_secs(5));
 
     path_to(_driver.clone()).await?;
     save_table_to_file_first(_driver.clone()).await?;
@@ -198,8 +196,23 @@ async fn wait_seconds_of_browser(
 async fn action_interactive(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
     debug!("wait for page completed load => wait for status from chrome driver");
     debug!("driver=> {:?}", _driver.status().await?);
+    loop {
+        print!("> ");
+        let _ = stdout().flush();
 
-    
+        let mut input = String::new();
+        stdin().read_line(&mut input).unwrap();
+
+        input = input.trim().to_string();
+
+        debug!("input => {}", input);
+
+        // shell exit
+        if input == "exit" {
+            break;
+        }
+        //end if input == "exit"
+    }
     // old debug!("Thread sleep for {} seconds", waiting_period);
     // old thread::sleep(Duration::from_secs(waiting_period));
     Ok(())
@@ -217,7 +230,6 @@ async fn path_to(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
         debug!("\tAction => {}", WEB_XPATH[field][1]);
         debug!("\tField => {}", WEB_XPATH[field][2]);
 
-
         if ACTION_BROWSER_CLOSE == WEB_XPATH[field][1] {
             debug!(
                 "Action START =>  ACTION_BROWSER_CLOSE ({})",
@@ -227,16 +239,14 @@ async fn path_to(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
             let _ = match result_close_browser {
                 Ok(_web_element) => {
                     info!(r#"ACTION_BROWSER_CLOSE => Ok"#);
-                    
                 }
                 Err(_e) => {
                     error!(r#"ACTION_BROWSER_CLOSE => Err {_e}"#);
-                   
+
                     continue;
                 }
             };
         }
-        
 
         if ACTION_INTERACTIVE == WEB_XPATH[field][1] {
             debug!(
