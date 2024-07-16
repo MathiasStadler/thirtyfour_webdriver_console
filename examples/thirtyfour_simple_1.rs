@@ -17,22 +17,9 @@ async fn main() -> color_eyre::Result<()> {
     // it much easier to locate where the error occurred.
     color_eyre::install()?;
 
-
-    let mut _caps = DesiredCapabilities::chrome();
-
-    // let mut caps: thirtyfour::ChromeCapabilities = DesiredCapabilities::chrome();
-    // caps.add_chrome_arg("--headless")?;
-    // caps.add_chrome_arg("--no-sandbox")?;
-    //  caps.add_chrome_arg("--disable-dev-shm-usage")?;
-
-    _caps.add_arg("--remote-debugging-pipe")?;
-    _caps.add_arg("--no-sandbox")?;
-
-    let driver_result = WebDriver::new("http://localhost:9515", _caps).await;
-
-    // let caps = DesiredCapabilities::chrome();
-    // // NOTE: For selenium 3.x, use "http://localhost:4444/wd/hub/session".
-    // let driver = WebDriver::new("http://localhost:9515", caps).await?;
+    let caps = DesiredCapabilities::chrome();
+    // NOTE: For selenium 3.x, use "http://localhost:4444/wd/hub/session".
+    let driver = WebDriver::new("http://localhost:9515", caps).await?;
 
     // Navigate to https://wikipedia.org.
     driver.goto("https://wikipedia.org").await?;
@@ -59,4 +46,4 @@ async fn main() -> color_eyre::Result<()> {
 }
 
 
-// cargo run --example  selenium_example
+// cargo run --example  thirtyfour_simple_1
