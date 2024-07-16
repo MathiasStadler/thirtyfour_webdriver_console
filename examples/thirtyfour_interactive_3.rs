@@ -143,6 +143,7 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
 async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     let _place: &str = "Place";
     let _driver = initialize_driver().await?;
+    let _driver = initialize_driver().await?;
 
     // _driver.goto(WEB_PAGE).await?;
     thread::sleep(Duration::from_secs(5));
@@ -255,6 +256,8 @@ async fn execute_command(
         // let _result_init_driver = init_driver();
     } else if cmd == "open" {
         debug!("execute_command  cmd => {}", cmd);
+
+        let _driver = initialize_driver().await?;
 
         let result_driver_goto = driver.goto("https://wikipedia.org").await;
         let _ = match result_driver_goto {
@@ -417,7 +420,10 @@ async fn path_to(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Error>> {
 
 // FOUND HERE
 // https://itehax.com/blog/web-scraping-using-rust
-async fn initialize_driver() -> Result<WebDriver, WebDriverError> {
+
+
+    async fn initialize_driver() -> Result<WebDriver, WebDriverError> {
+    
     info!("initialize_driver - start");
 
     let mut _caps = DesiredCapabilities::chrome();
