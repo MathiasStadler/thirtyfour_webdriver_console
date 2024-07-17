@@ -31,7 +31,7 @@ async fn main() -> color_eyre::Result<()> {
     let mut _driver = initialize_driver().await?;
 
     //wait_seconds_of_browser(_driver.clone(), 5).await?;
-    thread::sleep(Duration::from_secs(10));
+    thread::sleep(Duration::from_secs(5));
 
 
     // let _driver = match _result_driver{
@@ -49,7 +49,7 @@ async fn main() -> color_eyre::Result<()> {
     // let driver = WebDriver::new("http://localhost:9515", caps).await?;
 
     // Navigate to https://wikipedia.org.
-    // _driver.goto("https://wikipedia.org").await?;
+    _driver.goto("https://wikipedia.org").await?;
     // let elem_form = _driver.find(By::Id("search-form")).await?;
 
     // // Find element fromlet _driver = initialize_driver().await?;
@@ -67,9 +67,15 @@ async fn main() -> color_eyre::Result<()> {
     // Always explicitly close the browser. There are no async destructors.
     _driver.quit().await?;
 
+    
+
+    //reopen
     _driver = initialize_driver().await?;
+    _driver.goto("https://heise.de").await?;
     thread::sleep(Duration::from_secs(10));
     _driver.quit().await?;
+    
+    
 
 
     Ok(())
