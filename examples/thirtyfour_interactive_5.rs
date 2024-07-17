@@ -190,7 +190,6 @@ async fn execute_command(cmd: &String) -> color_eyre::Result<(), Box<dyn Error>>
             Err(_e) => {
                 error!(r#"ACTION_BROWSER_CLOSE => Err {_e}"#);
             }
-            
         };
 
         // let _result_init_driver = init_driver();
