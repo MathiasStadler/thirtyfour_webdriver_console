@@ -1,24 +1,22 @@
 // FROM HERE
 // https://github.com/stevepryde/thirtyfour/blob/main/thirtyfour/examples/selenium_example.rs
 
-//! Requires selenium running on port 4444:
+//! Requires selenium running on port 9515:
 //!
-//!     java -jar selenium-server-standalone-3.141.59.jar
 //!
 //! Run as follows:
 //!
-//!     cargo run --example selenium_example
+//!      cargo run --example thirtyfour_simple_1
 
 use thirtyfour::prelude::*;
 
 #[tokio::main]
 async fn main() -> color_eyre::Result<()> {
-    // The use of color_eyre gives much nicer error reports, including making
-    // it much easier to locate where the error occurred.
+    
     color_eyre::install()?;
 
     let caps = DesiredCapabilities::chrome();
-    // NOTE: For selenium 3.x, use "http://localhost:4444/wd/hub/session".
+    
     let driver = WebDriver::new("http://localhost:9515", caps).await?;
 
     // Navigate to https://wikipedia.org.

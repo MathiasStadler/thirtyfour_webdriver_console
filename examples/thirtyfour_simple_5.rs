@@ -14,6 +14,10 @@ use log::{debug, error, info, log_enabled, Level};
 
 use std::env::set_var;
 
+use std::time::Duration;
+use std::thread;
+use std::error::Error;
+
 use thirtyfour::prelude::*;
 
 // use std::error::Error;
@@ -21,19 +25,21 @@ use thirtyfour::prelude::*;
 #[tokio::main]
 async fn main() -> color_eyre::Result<()> {
     set_var("RUST_LOG", "debug");
-    // The use of color_eyre gives much nicer error reports, including making
-    // it much easier to locate where the error occurred.
+    
     color_eyre::install()?;
 
-    let _result_driver = initialize_driver().await;
+    let mut _driver = initialize_driver().await?;
+
+    //wait_seconds_of_browser(_driver.clone(), 5).await?;
+    thread::sleep(Duration::from_secs(10));
 
 
-    let _driver = match _result_driver{
+    // let _driver = match _result_driver{
 
-        Ok (webdriver) => webdriver,
-        Err(_e) => return Err(_e),
+    //     Ok (webdriver) => webdriver,
+    //     Err(_e) => return Err(_e),
 
-    };
+    // };
 
 
     
@@ -46,12 +52,10 @@ async fn main() -> color_eyre::Result<()> {
     // _driver.goto("https://wikipedia.org").await?;
     // let elem_form = _driver.find(By::Id("search-form")).await?;
 
-    // // Find element from element.
-    // let elem_text = elem_form.find(By::Id("searchInput")).await?;
-
+    // // Find element fromlet _driver = initialize_driver().await?;
     // // Type in the search terms.
     // elem_text.send_keys("selenium").await?;
-
+    
     // // Click the search button.
     // let elem_button = elem_form.find(By::Css("button[type='submit']")).await?;
     // elem_button.click().await?;
@@ -60,8 +64,13 @@ async fn main() -> color_eyre::Result<()> {
     // _driver.find(By::ClassName("firstHeading")).await?;
     // assert_eq!(_driver.title().await?, "Selenium - Wikipedia");
 
-    // // Always explicitly close the browser. There are no async destructors.
-    // _driver.quit().await?;
+    // Always explicitly close the browser. There are no async destructors.
+    _driver.quit().await?;
+
+    _driver = initialize_driver().await?;
+    thread::sleep(Duration::from_secs(10));
+    _driver.quit().await?;
+
 
     Ok(())
     
@@ -95,4 +104,16 @@ async fn initialize_driver() -> Result<WebDriver, WebDriverError> {
 }
 
 
-// cargo run --example  thirtyfour_simple_1
+async fn wait_seconds_of_browser(
+    _driver: WebDriver,
+    waiting_period: u64,
+) -> color_eyre::Result<(), Box<dyn Error>> {
+    debug!("wait for page completed load => wait for status from chrome driver");
+    debug!("driver=> {:?}", _driver.status().await?);
+    debug!("Thread sleep for {} seconds", waiting_period);
+    thread::sleep(Duration::from_secs(waiting_period));
+    Ok(())
+}
+
+
+// cargo run --example  thirtyfour_simple_5

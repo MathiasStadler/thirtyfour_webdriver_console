@@ -21,19 +21,18 @@ use thirtyfour::prelude::*;
 #[tokio::main]
 async fn main() -> color_eyre::Result<()> {
     set_var("RUST_LOG", "debug");
-    // The use of color_eyre gives much nicer error reports, including making
-    // it much easier to locate where the error occurred.
+    
     color_eyre::install()?;
 
-    let _result_driver = initialize_driver().await;
+    let _result_driver = initialize_driver().await?;
 
 
-    let _driver = match _result_driver{
+    // let _driver = match _result_driver{
 
-        Ok (webdriver) => webdriver,
-        Err(_e) => return Err(_e),
+    //     Ok (webdriver) => webdriver,
+    //     Err(_e) => return Err(_e),
 
-    };
+    // };
 
 
     
@@ -95,4 +94,4 @@ async fn initialize_driver() -> Result<WebDriver, WebDriverError> {
 }
 
 
-// cargo run --example  thirtyfour_simple_1
+// cargo run --example  thirtyfour_simple_3
