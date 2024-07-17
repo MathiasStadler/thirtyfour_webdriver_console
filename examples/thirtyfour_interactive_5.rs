@@ -90,10 +90,9 @@ fn main() -> color_eyre::Result<(), Box<dyn Error>> {
 
 async fn run() -> color_eyre::Result<(), Box<dyn Error>> {
     let _place: &str = "Place";
-    
+
     // path_to().await?;
-    action_interactive()?;
-    
+    action_interactive().await?;
 
     Ok(())
 }
@@ -108,6 +107,7 @@ async fn close_browser(_driver: WebDriver) -> color_eyre::Result<(), Box<dyn Err
 
 // https://github.com/stevepryde/thirtyfour/issues/4?ref=https://githubhelp.com
 //
+#[allow(dead_code)]
 async fn wait_seconds_of_browser(waiting_period: u64) -> color_eyre::Result<(), Box<dyn Error>> {
     // debug!("wait for page completed load => wait for status from chrome driver");
     // debug!("driver=> {:?}", _driver.status().await?);
@@ -175,51 +175,27 @@ async fn execute_command(cmd: &String) -> color_eyre::Result<(), Box<dyn Error>>
     // debug!("execute_command  _cmd => {}", cmd);
 
     // if cmd == "init" {
-        debug!("execute_command  _cmd => {}", cmd);
+    debug!("execute_command  _cmd => {}", cmd);
     let _driver = init_driver().await?;
 
-        // let _result_init_driver = init_driver();
-    // } else 
+    // let _result_init_driver = init_driver();
+    // } else
     if cmd == "close" {
-        
-            let result_close_browser = close_browser(_driver.clone()).await;
-            let _ = match result_close_browser {
-                Ok(_web_element) => {
-                    info!(r#"ACTION_BROWSER_CLOSE => Ok"#);
-                }
-                Err(_e) => {
-                    error!(r#"ACTION_BROWSER_CLOSE => Err {_e}"#);
-                }
-            };
-        
+        debug!("execute_command  _cmd => {}", cmd);
+        let result_close_browser = close_browser(_driver.clone()).await;
+        let _ = match result_close_browser {
+            Ok(_web_element) => {
+                info!(r#"ACTION_BROWSER_CLOSE => Ok"#);
+            }
+            Err(_e) => {
+                error!(r#"ACTION_BROWSER_CLOSE => Err {_e}"#);
+            }
+            
+        };
 
         // let _result_init_driver = init_driver();
     } else if cmd == "open" {
         debug!("execute_command  cmd => {}", cmd);
-
-        // NO INIT HERE
-        // let _driver = init_driver().await?;
-
-        //let result_driver_goto = driver.goto("https://wikipedia.org").await;
-        //let result_driver_goto = _driver.goto("wikipedia.org").await;
-        // let _ = match result_driver_goto {
-        //     Ok(_web_element) => {
-        //         info!("ACTION_BROWSER_OPEN => open webpage");
-        //     }
-        //     Err(_e) => {
-        //         error!(r#"ACTION_BROWSER_OPEN => Err {_e}"#);
-        //     }
-        // };
-
-        // let result_open_browser = open_browser(_driver.clone()).await;
-        // let _ = match result_open_browser {
-        //     Ok(_web_element) => {
-        //         info!(r#"ACTION_BROWSER_OPEN => Ok"#);
-        //     }
-        //     Err(_e) => {
-        //         error!(r#"ACTION_BROWSER_OPEN => Err {_e}"#);
-        //     }
-        // };
     } else {
         info!("Opps!!! Command NOT FOUND {}", cmd);
     }
@@ -227,8 +203,6 @@ async fn execute_command(cmd: &String) -> color_eyre::Result<(), Box<dyn Error>>
 
     Ok(())
 }
-
-
 
 // 25 year
 // https://www.macrotrends.net/stocks/charts/TREX/trex/stock-price-history
@@ -242,7 +216,6 @@ async fn init_driver() -> Result<WebDriver, WebDriverError> {
     info!("init_driver - start");
 
     let mut _caps = DesiredCapabilities::chrome();
-
 
     _caps.add_arg("--remote-debugging-pipe")?;
     _caps.add_arg("--no-sandbox")?;
@@ -260,16 +233,9 @@ async fn init_driver() -> Result<WebDriver, WebDriverError> {
     Ok(driver)
 }
 
-// FROM HERE
-// https://users.rust-lang.org/t/how-to-print-the-type-of-a-variable/101947/2
-#[allow(dead_code)]
-fn print_type<T>(_: &T) {
-    debug!("Type is => {}", std::any::type_name::<T>());
-}
-
 /*
-rustfmt  ./examples/tokio_finviz_method_five.rs
+rustfmt  ./examples/thirtyfour_interactive_5.rs
 
-cargo build --example thirtyfour_interactive_4
-cargo run --example thirtyfour_interactive_4
+cargo build --example thirtyfour_interactive_5
+cargo run --example thirtyfour_interactive_5
 */
