@@ -117,6 +117,17 @@ async fn wait_seconds_of_browser(waiting_period: u64) -> color_eyre::Result<(), 
 }
 
 async fn action_interactive() -> color_eyre::Result<(), Box<dyn Error>> {
+
+// init first the _driver
+let mut _driver = initialize_driver().await?;
+
+// let _driver = match _driver_result_driver{
+
+//         Ok (webdriver) => webdriver,
+//         Err(_e) => return Err(_e),
+
+//     };
+
     loop {
         print!("> ");
         let _ = stdout().flush();
@@ -229,6 +240,33 @@ async fn init_driver() -> Result<WebDriver, WebDriverError> {
 
     driver.maximize_window().await?;
     info!("init_driver - end");
+    Ok(driver)
+}
+
+async fn initialize_driver() -> Result<WebDriver, WebDriverError> {
+    
+    info!("initialize_driver - start");
+
+    let mut _caps = DesiredCapabilities::chrome();
+
+    // let mut caps: thirtyfour::ChromeCapabilities = DesiredCapabilities::chrome();
+    // caps.add_chrome_arg("--headless")?;
+    // caps.add_chrome_arg("--no-sandbox")?;
+    //  caps.add_chrome_arg("--disable-dev-shm-usage")?;
+
+    _caps.add_arg("--remote-debugging-pipe")?;
+    _caps.add_arg("--no-sandbox")?;
+
+    let driver_result = WebDriver::new("http://localhost:9515", _caps).await;
+
+    // let result = WebDriver::new("http://localhost:4444/wd/hub", &caps).await;
+    let driver = match driver_result {
+        Ok(value) => value,
+        Err(error) => return Err(error),
+    };
+
+    driver.maximize_window().await?;
+    info!("initialize_driver - end");
     Ok(driver)
 }
 

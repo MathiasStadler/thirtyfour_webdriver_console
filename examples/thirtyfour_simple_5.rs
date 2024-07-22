@@ -70,9 +70,9 @@ async fn main() -> color_eyre::Result<()> {
     
 
     //reopen
-    _driver = initialize_driver().await?;
-    _driver.goto("https://heise.de").await?;
-    thread::sleep(Duration::from_secs(10));
+    // _driver = initialize_driver().await?;
+    // _driver.goto("https://heise.de").await?;
+    thread::sleep(Duration::from_secs(5));
     _driver.quit().await?;
     
     
